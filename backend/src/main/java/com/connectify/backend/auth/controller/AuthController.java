@@ -3,6 +3,7 @@ package com.connectify.backend.auth.controller;
 import com.connectify.backend.auth.dto.request.ChangePasswordRequest;
 import com.connectify.backend.auth.dto.request.ForgotPasswordRequest;
 import com.connectify.backend.auth.dto.request.LoginRequest;
+import com.connectify.backend.auth.dto.request.RefreshTokenRequest;
 import com.connectify.backend.auth.dto.request.RegisterRequest;
 import com.connectify.backend.auth.dto.request.ResetPasswordRequest;
 import com.connectify.backend.auth.dto.request.VerifyEmailRequest;
@@ -47,6 +48,11 @@ public class AuthController {
     @PostMapping("/verify-login-otp")
     public ResponseEntity<LoginResponse> verifyLoginOtp(@Valid @RequestBody VerifyOtpRequest verifyOtpRequest) {
         return ResponseEntity.ok(authService.verifyLoginOtp(verifyOtpRequest));
+    }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<LoginResponse> refreshToken(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
+        return ResponseEntity.ok(authService.refreshToken(refreshTokenRequest));
     }
 
     @PostMapping("/forgot-password")

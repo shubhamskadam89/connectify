@@ -3,6 +3,7 @@ package com.connectify.backend.auth.service;
 import com.connectify.backend.auth.dto.request.ChangePasswordRequest;
 import com.connectify.backend.auth.dto.request.ForgotPasswordRequest;
 import com.connectify.backend.auth.dto.request.LoginRequest;
+import com.connectify.backend.auth.dto.request.RefreshTokenRequest;
 import com.connectify.backend.auth.dto.request.RegisterRequest;
 import com.connectify.backend.auth.dto.request.ResetPasswordRequest;
 import com.connectify.backend.auth.dto.request.VerifyEmailRequest;
@@ -31,7 +32,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.security.Principal;
 import java.time.Duration;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
@@ -48,6 +48,8 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final EmailVerificationService emailVerificationService;
     private final AuthChallengeStore authChallengeStore;
+    private final JwtService jwtService;
+    private final RefreshTokenService refreshTokenService;
 
     @Transactional
     public RegisterResponse register(RegisterRequest request) {
@@ -158,6 +160,23 @@ public class AuthService {
     }
 
     @Transactional
+    public LoginResponse refreshToken(RefreshTokenRequest request) {
+        log.info("Refresh token request received");
+
+        User user = refreshTokenService.rotate(request.getRefreshToken());
+        String newRefreshToken = refreshTokenService.create(user);
+
+        log.info("Refresh token rotated for userId={}, email={}", user.getId(), user.getEmail());
+        return LoginResponse.builder()
+                .message("Token refreshed successfully")
+                .otpRequired(false)
+                .accessToken(jwtService.generateAccessToken(user))
+                .refreshToken(newRefreshToken)
+                .user(toUserResponse(user))
+                .build();
+    }
+
+    @Transactional
     public ForgotPasswordResponse forgotPassword(ForgotPasswordRequest request) {
         log.info("Forgot password request received for email={}", request.getEmail());
 
@@ -212,6 +231,7 @@ public class AuthService {
 
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
+        refreshTokenService.revokeAll(user);
 
         log.info("Password reset successfully for userId={}, email={}", user.getId(), user.getEmail());
 
@@ -234,6 +254,7 @@ public class AuthService {
 
         user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         userRepository.save(user);
+        refreshTokenService.revokeAll(user);
 
         log.info("Password changed successfully for userId={}, email={}", user.getId(), user.getEmail());
 
@@ -246,8 +267,8 @@ public class AuthService {
         return LoginResponse.builder()
                 .message("Login successful")
                 .otpRequired(false)
-                .accessToken(generateToken())
-                .refreshToken(generateToken())
+                .accessToken(jwtService.generateAccessToken(user))
+                .refreshToken(refreshTokenService.create(user))
                 .user(toUserResponse(user))
                 .build();
     }
@@ -267,10 +288,6 @@ public class AuthService {
                 .lastName(user.getLastName())
                 .role(user.getRole())
                 .build();
-    }
-
-    private String generateToken() {
-        return UUID.randomUUID().toString().replace("-", "");
     }
 
     private String generateOtp() {
