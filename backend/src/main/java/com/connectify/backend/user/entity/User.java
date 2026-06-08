@@ -28,6 +28,15 @@ public class User {
 
     private String lastName;
 
+    @Column(length = 500)
+    private String bio;
+
+    private String profileImageUrl;
+
+    private String location;
+
+    private String website;
+
     @Email
     @Column(unique = true, nullable = false)
     private String email;
