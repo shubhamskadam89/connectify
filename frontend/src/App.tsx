@@ -1,15 +1,45 @@
+import { AuthProvider, useAuth } from './context/AuthContext';
+import { RegisterForm } from './components/auth/RegisterForm';
+import { VerifyEmailForm } from './components/auth/VerifyEmailForm';
+import { LoginForm } from './components/auth/LoginForm';
+import { ForgotPasswordForm } from './components/auth/ForgotPasswordForm';
+import { ResetPasswordForm } from './components/auth/ResetPasswordForm';
+import { Dashboard } from './components/dashboard/Dashboard';
 
-import './App.css'
+function AppContent() {
+  const { currentView } = useAuth();
 
-function App() {
+  const renderView = () => {
+    switch (currentView) {
+      case 'register':
+        return <RegisterForm />;
+      case 'verifyEmail':
+        return <VerifyEmailForm />;
+      case 'forgotPassword':
+        return <ForgotPasswordForm />;
+      case 'resetPassword':
+        return <ResetPasswordForm />;
+      case 'dashboard':
+        return <Dashboard />;
+      case 'login':
+      default:
+        return <LoginForm />;
+    }
+  };
 
   return (
-    <>
-      <div className='bg-black min-h-screen min-w-screen flex justify-center items-center'>
-        <h1 className='text-white'> Hola Amigos</h1>
-      </div>
-    </>
-  )
+    <div className="bg-gray-900 min-h-screen w-full flex flex-col justify-center items-center p-4">
+      {renderView()}
+    </div>
+  );
 }
 
-export default App
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
+  );
+}
+
+export default App;

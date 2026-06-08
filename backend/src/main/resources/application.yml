@@ -1,11 +1,13 @@
 spring:
   application:
     name: connectify-backend
+  config:
+    import: optional:file:.env[.properties],optional:file:../.env[.properties]
 
   datasource:
-    url: jdbc:mysql://localhost:3306/connectify
-    username: root
-    password: root1234
+    url: ${DB_URL:jdbc:mysql://localhost:3306/connectify}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:root1234}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
