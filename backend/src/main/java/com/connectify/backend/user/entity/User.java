@@ -1,11 +1,9 @@
 package com.connectify.backend.user.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Length;
@@ -19,6 +17,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users")
+@Builder
 public class User {
 
     @Id
@@ -29,9 +28,14 @@ public class User {
 
     private String lastName;
 
+    @Email
+    @Column(unique = true, nullable = false)
+    private String email;
+
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @Builder.Default
     private Role role = Role.USER;
 
     @NotNull
@@ -49,4 +53,8 @@ public class User {
     @UpdateTimestamp
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+    @Builder.Default
+    @Column(nullable = false)
+    private boolean emailVerified = false;
 }
