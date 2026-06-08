@@ -194,7 +194,7 @@ All features include:
 Current Phase:
 
 ```text
-Milestone 1 — Authentication System
+Milestone 2 — User Management
 ```
 
 Planned Progression:
@@ -215,3 +215,7 @@ Authentication
 ## License
 
 This project is developed for learning, experimentation, and backend engineering practice.
+
+## Local Development
+
+Local setup instructions, environment variables, Docker Compose database setup, and Testcontainers notes are documented in [docs/local-development.md](docs/local-development.md).
