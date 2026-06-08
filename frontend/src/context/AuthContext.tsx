@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useCallback, useContext, useState, useEffect } from 'react';
 import type { User } from '../api/auth';
 
 export type AuthView =
@@ -17,6 +17,7 @@ interface AuthContextType {
   currentView: AuthView;
   setCurrentView: (view: AuthView) => void;
   login: (accessToken: string, refreshToken: string, user: User) => void;
+  updateUser: (user: User) => void;
   logout: () => void;
   
   // Shared temporary state for flow transitions
@@ -59,7 +60,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, []);
 
-  const login = (token: string, refresh: string, userData: User) => {
+  const login = useCallback((token: string, refresh: string, userData: User) => {
     localStorage.setItem('accessToken', token);
     localStorage.setItem('refreshToken', refresh);
     localStorage.setItem('user', JSON.stringify(userData));
@@ -67,9 +68,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setRefreshToken(refresh);
     setUser(userData);
     setCurrentView('dashboard');
-  };
+  }, []);
 
-  const logout = () => {
+  const updateUser = useCallback((userData: User) => {
+    localStorage.setItem('user', JSON.stringify(userData));
+    setUser(userData);
+  }, []);
+
+  const logout = useCallback(() => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('user');
@@ -79,7 +85,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setResetToken(null);
     setTempEmail(null);
     setCurrentView('login');
-  };
+  }, []);
 
   const isAuthenticated = !!accessToken;
 
@@ -93,6 +99,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         currentView,
         setCurrentView,
         login,
+        updateUser,
         logout,
         tempEmail,
         setTempEmail,

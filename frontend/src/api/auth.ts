@@ -16,8 +16,8 @@ export interface RegisterPayload {
   email: string;
   username: string;
   password?: string;
-  firstName?: string;
-  lastName?: string;
+  firstName?: string | null;
+  lastName?: string | null;
 }
 
 export interface VerifyEmailPayload {
@@ -49,11 +49,15 @@ export interface ResetPasswordPayload {
 }
 
 export interface User {
-  id?: string;
+  id?: string | number;
   email: string;
   username: string;
-  firstName?: string;
-  lastName?: string;
+  firstName?: string | null;
+  lastName?: string | null;
+  bio?: string | null;
+  profileImageUrl?: string | null;
+  location?: string | null;
+  website?: string | null;
   [key: string]: any;
 }
 
