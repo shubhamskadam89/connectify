@@ -1,2 +1,2 @@
 ALTER TABLE users
-    ADD COLUMN emailVerified boolean NOT NULL AFTER email;
+    ADD COLUMN email_verified BOOLEAN NOT NULL DEFAULT FALSE AFTER email;
