@@ -30,6 +30,11 @@ public class User {
     private String lastName;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role = Role.USER;
+
+    @NotNull
     @Length(min = 6)
     @Column(nullable = false)
     private String password;
