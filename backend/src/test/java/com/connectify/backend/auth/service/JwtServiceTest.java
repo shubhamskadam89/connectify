@@ -2,8 +2,8 @@ package com.connectify.backend.auth.service;
 
 import com.connectify.backend.user.entity.Role;
 import com.connectify.backend.user.entity.User;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.Optional;
 
