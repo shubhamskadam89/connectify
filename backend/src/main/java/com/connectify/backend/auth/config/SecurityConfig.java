@@ -45,6 +45,8 @@ public class SecurityConfig {
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.POST, "/api/auth/v1/change-password").authenticated()
+                .requestMatchers(HttpMethod.GET, "/api/users/v1/me").authenticated()
+                .requestMatchers(HttpMethod.PATCH, "/api/users/v1/me").authenticated()
                 .anyRequest().permitAll()
         );
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
