@@ -1,1 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
 @import "tailwindcss";
+
+@theme {
+  --color-brand-bg: #F8F7F4;
+  --color-brand-surface: #FFFFFF;
+  --color-brand-surface-muted: #F1F0EC;
+  --color-brand-surface-hover: #F6F5F2;
+  --color-brand-border: #E6E3DD;
+  --color-brand-border-strong: #D8D4CC;
+  --color-brand-text-primary: #111111;
+  --color-brand-text-secondary: #707070;
+  --color-brand-text-muted: #9A9A9A;
+  --color-brand-accent: #D96B5F;
+  --color-brand-accent-hover: #C95B50;
+  --color-brand-accent-soft: #F8E4E0;
+  --color-brand-success: #2F7D50;
+  --color-brand-success-soft: #E7F3EC;
+  --color-brand-danger: #B9433D;
+  --color-brand-danger-soft: #F8E1DF;
+  --color-brand-warning: #9B6A24;
+  --color-brand-warning-soft: #F8ECD8;
+  
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-serif: "DM Serif Display", serif;
+}
+
+body {
+  background-color: var(--color-brand-bg);
+  color: var(--color-brand-text-primary);
+  font-family: var(--font-sans);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
